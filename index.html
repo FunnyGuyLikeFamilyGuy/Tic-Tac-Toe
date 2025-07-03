@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+THIS SHOULD BE A LINTER ERROR<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -283,6 +283,7 @@
 
     let servers = [];
     let currentServer = null;
+    let isLocalPlay = false;
 
     function updateServerList() {
       serverList.innerHTML = "";
@@ -316,6 +317,7 @@
       if (serverName) {
         currentServer = { name: serverName, password, players: 1 };
         servers.push(currentServer);
+        isLocalPlay = false;
         createServerModal.classList.remove("active");
         serverNameInput.value = "";
         serverPasswordInput.value = "";
@@ -340,6 +342,8 @@
     }
 
     playLocalBtn.addEventListener("click", () => {
+      isLocalPlay = true;
+      currentServer = null;
       showGame();
     });
 
@@ -358,6 +362,7 @@
         }
         currentServer = null;
       }
+      isLocalPlay = false;
       gameContainer.style.display = "none";
       landing.style.display = "block";
       updateServerList();
@@ -427,7 +432,7 @@
     function resetGame() {
       cells = Array(9).fill(null);
       currentPlayer = "X";
-      gameActive = currentServer && currentServer.players === 2;
+      gameActive = isLocalPlay || (currentServer && currentServer.players === 2);
       createBoard();
       updateStatus(gameActive ? `Player ${currentPlayer}'s turn` : "Waiting for another player...");
     }
